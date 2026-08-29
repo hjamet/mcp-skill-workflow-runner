@@ -481,12 +481,22 @@ def verify_scenario_e(temp_sessions_dir: Path) -> None:
             schema_props = t.input_schema.get("properties", {})
             has_session_id = "session_id" in schema_props
             record_check(f"Tool '{t.name}' has NO 'session_id' in input schema", not has_session_id)
+            if t.name == "start_workflow":
+                record_check("Tool 'start_workflow' has 'workspace_dir' in required properties", "workspace_dir" in t.input_schema.get("required", []))
 
     asyncio.run(run_inspections())
 
-    # 2. Test start_workflow with NO session_id
+    # 2. Test start_workflow with mandatory workspace_dir and NO session_id
     async def run_tool_lifecycle():
-        # Start workflow
+        # Missing workspace_dir must raise error
+        missing_ws_err = False
+        try:
+            await app.call_tool("start_workflow", {"skill_name": work_example})
+        except Exception:
+            missing_ws_err = True
+        record_check("start_workflow raises validation error if workspace_dir is missing", missing_ws_err)
+
+        # Start workflow with workspace_dir
         res1 = await app.call_tool(
             "start_workflow",
             {
