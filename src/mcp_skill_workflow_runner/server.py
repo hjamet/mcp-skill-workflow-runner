@@ -28,6 +28,7 @@ from mcp_skill_workflow_runner.exceptions import (
     SessionNotFoundError,
     WorkflowRunnerError,
 )
+from mcp_skill_workflow_runner.models import WorkflowSessionState
 from mcp_skill_workflow_runner.parser import parse_workflow_file
 from mcp_skill_workflow_runner.resolver import resolve_skill_file
 from mcp_skill_workflow_runner.session_manager import SessionManager
