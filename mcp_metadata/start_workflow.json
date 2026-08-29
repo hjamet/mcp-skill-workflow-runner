@@ -3,6 +3,19 @@
   "description": "\n        Start a new workflow execution for a given skill name or file path within a specified workspace directory.\n\n        Resolves the SKILL.md/workflow.md file taking workspace_dir as top priority (.agent/skills/, .agents/skills/, skills/),\n        parses YAML frontmatter and Markdown sections, validates DAG graph connectivity, manages the single active session,\n        and returns the Step 1 directive envelope.\n\n        :param skill_name: Name of the skill (e.g. 'work', 'scout') or path to SKILL.md.\n        :param workspace_dir: Root directory of the target workspace / repository (e.g. 'c:/Users/hjamet/Documents/VoiceNotes').\n        :param restart: If True, resets/aborts any active session and creates a fresh one. If False and an active session exists for this workflow, reuses it.\n        :param initial_context: Optional initial context variables (e.g. {'mode': 'B', 'project': 'VoiceNotes'}).\n        :return: Deterministic Progressive Disclosure StepResultEnvelope dictionary.\n        ",
   "parameters": {
     "properties": {
+      "skill_name": {
+        "title": "Skill Name",
+        "type": "string"
+      },
+      "workspace_dir": {
+        "title": "Workspace Dir",
+        "type": "string"
+      },
+      "restart": {
+        "default": false,
+        "title": "Restart",
+        "type": "boolean"
+      },
       "initial_context": {
         "anyOf": [
           {
@@ -15,19 +28,6 @@
         ],
         "default": null,
         "title": "Initial Context"
-      },
-      "restart": {
-        "default": false,
-        "title": "Restart",
-        "type": "boolean"
-      },
-      "skill_name": {
-        "title": "Skill Name",
-        "type": "string"
-      },
-      "workspace_dir": {
-        "title": "Workspace Dir",
-        "type": "string"
       }
     },
     "required": [
