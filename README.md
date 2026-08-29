@@ -109,12 +109,12 @@ Lancez les sous-agents sur les clusters découverts...
 Le serveur expose 3 outils MCP stdio déterministes :
 
 ### 1. `start_workflow`
-Initialise un workflow, valide le graphe DAG, crée une session persistante et renvoie l'enveloppe de l'Étape 1.
+Initialise un workflow dans un workspace donné, valide le graphe DAG, crée une session persistante et renvoie l'enveloppe de l'Étape 1.
 - **Paramètres** :
   - `skill_name` *(str, obligatoire)* : Nom du skill (`work`, `scout`) ou chemin de fichier.
-  - `restart` *(bool, optionnel)* : Si `True`, réinitialise/remplace toute session active existante. Si `False` et qu'une session existe pour ce workflow, la réutilise.
+  - `workspace_dir` *(str, obligatoire)* : Répertoire racine du workspace cible pour la résolution prioritaire (`.agent/skills/`, `.agents/skills/`, `skills/`).
+  - `restart` *(bool, optionnel, défaut `False`)* : Si `True`, réinitialise/remplace toute session active existante. Si `False` et qu'une session existe pour ce workflow, la réutilise.
   - `initial_context` *(dict, optionnel)* : Variables de contexte initiales.
-  - `workspace_dir` *(str, optionnel)* : Répertoire racine du workspace local.
 
 ### 2. `next_step`
 Enregistre le livrable de l'étape courante, met à jour le contexte, résout la prochaine étape via le DAG et retourne la nouvelle enveloppe directive.
