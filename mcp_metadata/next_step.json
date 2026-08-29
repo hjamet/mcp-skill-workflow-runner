@@ -1,0 +1,63 @@
+{
+  "name": "next_step",
+  "description": "\n        Advance the active workflow to the next step based on step deliverables and DAG transitions.\n\n        Records the current step deliverable, updates context variables, evaluates conditional\n        branches or default transitions, increments cycle count if looping, and returns the next step directive envelope.\n\n        :param user_response: Response or text output from the completed step.\n        :param step_output: Alternative or structured output payload from the completed step.\n        :param transition_choice: Explicit choice among declared step transitions.\n        :param variables: Context updates to record in the session state.\n        :return: Next Step directive envelope dictionary, or completion report if finished.\n        ",
+  "parameters": {
+    "properties": {
+      "step_output": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Step Output"
+      },
+      "transition_choice": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Transition Choice"
+      },
+      "user_response": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "User Response"
+      },
+      "variables": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Variables"
+      }
+    },
+    "title": "next_stepArguments",
+    "type": "object"
+  }
+}

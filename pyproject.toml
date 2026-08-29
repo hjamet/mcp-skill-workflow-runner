@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-skill-workflow-runner"
+version = "0.1.0"
+description = "FastMCP server implementing deterministic progressive disclosure workflow execution for Antigravity skills"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [
+    { name = "Henri Jamet", email = "hjamet@example.com" }
+]
+dependencies = [
+    "mcp>=1.0.0",
+    "pydantic>=2.7.0",
+    "pyyaml>=6.0",
+    "click>=8.1.0",
+    "rich>=13.7.0",
+]
+
+[project.scripts]
+skill-workflow = "mcp_skill_workflow_runner.cli:main"
+mcp-skill-workflow-runner = "mcp_skill_workflow_runner.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

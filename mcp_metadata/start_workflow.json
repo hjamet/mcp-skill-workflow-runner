@@ -1,0 +1,47 @@
+{
+  "name": "start_workflow",
+  "description": "\n        Start a new workflow execution for a given skill name or file path.\n\n        Resolves the SKILL.md/workflow.md file, parses YAML frontmatter and Markdown sections,\n        validates DAG graph connectivity, manages the single active session, and returns the Step 1 directive envelope.\n\n        :param skill_name: Name of the skill (e.g. 'work', 'scout') or path to SKILL.md.\n        :param restart: If True, resets/aborts any active session and creates a fresh one. If False and an active session exists for this workflow, reuses it.\n        :param initial_context: Optional initial context variables (e.g. {'mode': 'B', 'project': 'VoiceNotes'}).\n        :param workspace_dir: Optional workspace root directory to look for local skills.\n        :return: Deterministic Progressive Disclosure StepResultEnvelope dictionary.\n        ",
+  "parameters": {
+    "properties": {
+      "initial_context": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Initial Context"
+      },
+      "restart": {
+        "default": false,
+        "title": "Restart",
+        "type": "boolean"
+      },
+      "skill_name": {
+        "title": "Skill Name",
+        "type": "string"
+      },
+      "workspace_dir": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Workspace Dir"
+      }
+    },
+    "required": [
+      "skill_name"
+    ],
+    "title": "start_workflowArguments",
+    "type": "object"
+  }
+}

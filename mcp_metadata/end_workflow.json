@@ -1,0 +1,27 @@
+{
+  "name": "end_workflow",
+  "description": "\n        Close the active workflow session with a final status and obtain a complete execution report.\n\n        :param final_summary: Final wrap-up summary or conclusion text.\n        :param status: Closure status ('completed', 'aborted', 'paused', 'failed'). Default: 'completed'.\n        :return: Comprehensive execution report dictionary with duration, step history, and metrics.\n        ",
+  "parameters": {
+    "properties": {
+      "final_summary": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Final Summary"
+      },
+      "status": {
+        "default": "completed",
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "title": "end_workflowArguments",
+    "type": "object"
+  }
+}
