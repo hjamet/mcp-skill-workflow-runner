@@ -18,12 +18,12 @@ Le serveur `skill-workflow-runner` agit comme l'**orchestrateur déterministe d'
 ## 🛠️ Catalogue des 3 Outils MCP
 
 ### 1. `start_workflow`
-*Initialise l'exécution d'un workflow pour une compétence donnée.*
+*Initialise l'exécution d'un workflow pour une compétence donnée dans un workspace spécifique.*
 - **Arguments** :
   - `skill_name` *(string, obligatoire)* : Nom du skill (ex: `"work"`, `"scout"`, `"refine"`, `"build"`, `"literature-review"`) ou chemin direct vers un fichier `SKILL.md` / `workflow.md`.
+  - `workspace_dir` *(string, obligatoire)* : Répertoire racine du projet / workspace cible (ex: `"c:/Users/hjamet/Documents/VoiceNotes"` ou un repo de code) pour la résolution locale prioritaire (`.agent/skills/`, `.agents/skills/`, `skills/`).
   - `restart` *(boolean, optionnel, défaut `false`)* : Réinitialise/remplace toute session active si `true`, ou réutilise la session active existante pour ce workflow si `false`.
   - `initial_context` *(object, optionnel)* : Dictionnaire des variables de contexte initiales (ex: `{"mode": "B", "topic": "VoiceNotes"}`).
-  - `workspace_dir` *(string, optionnel)* : Répertoire racine du projet courant pour la résolution locale (`.agent/skills/`, `skills/`).
 - **Retour** : `StepResultEnvelope` de l'étape d'initialisation (généralement Étape 1).
 
 ### 2. `next_step`
@@ -47,7 +47,7 @@ Le serveur `skill-workflow-runner` agit comme l'**orchestrateur déterministe d'
 ## 📋 Protocole d'Exécution par Workflow / Skill
 
 ### 🔹 `/work` (Workflow Opérationnel Structuré)
-1. Invoquer `start_workflow(skill_name="work", initial_context={"task_description": "...", "mode": "..."})`.
+1. Invoquer `start_workflow(skill_name="work", workspace_dir="c:/Users/hjamet/Documents/VoiceNotes", initial_context={"project_name": "...", "iteration": 1})`.
 2. Pour chaque étape reçue dans la directive :
    - Respecter scrupuleusement les `mandated_tools` (ex: `grep_search`, `find_by_name`, `replace_file_content`).
    - Si l'étape recommande un sous-agent (`subagent_recommendation`), instancier le sous-agent selon l'heuristique prescrite.
@@ -55,25 +55,25 @@ Le serveur `skill-workflow-runner` agit comme l'**orchestrateur déterministe d'
 3. Clôturer avec `end_workflow(...)` une fois l'étape terminale validée.
 
 ### 🔹 `/scout` (Reconnaissance, Exploration & Cartographie de Base de Code)
-1. `start_workflow(skill_name="scout", initial_context={"scope": "..."})`.
+1. `start_workflow(skill_name="scout", workspace_dir="c:/Users/hjamet/Documents/VoiceNotes", initial_context={"scope": "..."})`.
 2. Étape 1 : Cartographie architecture et arborescence (outils: `list_dir`, `find_by_name`).
 3. Étape 2 : Analyse des dépendances et points d'entrée critiques.
 4. Étape 3 : Synthèse de l'état de l'art du repo et rapport structuré.
 5. Avancer via `next_step` jusqu'au rapport final.
 
 ### 🔹 `/refine` (Spécification Socratique, Ambiguïtés & Analyse Pré-Build)
-1. `start_workflow(skill_name="refine")`.
+1. `start_workflow(skill_name="refine", workspace_dir="c:/Users/hjamet/Documents/VoiceNotes")`.
 2. Traite les boucles socratiques de clarification avec l'utilisateur (`step_type="interactive"` / `loop_decision`).
 3. Mettre à jour les variables de décision avec `next_step(variables={"user_confirmed_choice": ...})`.
 4. Continuer jusqu'à l'approbation du plan final.
 
 ### 🔹 `/build` (Implémentation, TDD, Validation & Tests Unitaires)
-1. `start_workflow(skill_name="build")`.
+1. `start_workflow(skill_name="build", workspace_dir="c:/Users/hjamet/Documents/VoiceNotes")`.
 2. Exécuter la création de code étape par étape en respectant les barrières de tests.
 3. Enregistrer les résultats de tests dans `step_output` à chaque appel `next_step`.
 
 ### 🔹 `/literature-review` (Revue de Littérature, Analyse Systématique & Synthèse)
-1. `start_workflow(skill_name="literature-review", initial_context={"topic": "..."})`.
+1. `start_workflow(skill_name="literature-review", workspace_dir="c:/Users/hjamet/Documents/VoiceNotes", initial_context={"topic": "..."})`.
 2. Orchestrer la découverte des sources, l'extraction de métadonnées, l'évaluation critique et la synthèse croisée.
 3. Valider chaque étape avec des résumés d'analyse intermédiaires.
 
