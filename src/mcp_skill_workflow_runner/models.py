@@ -104,7 +104,7 @@ class ContextFieldSchema(BaseModel):
 
 class StepDefinition(BaseModel):
     """Complete specification of an individual workflow step."""
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="ignore")
 
     id: str = Field(description="Unique step identifier (e.g. 'step_1_exploration')")
     title: str = Field(description="Human-readable title with optional emojis")
@@ -156,11 +156,12 @@ WorkflowStep = StepDefinition
 
 class WorkflowDefinition(BaseModel):
     """Parsed and validated top-level workflow definition."""
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="ignore")
 
     name: str = Field(description="Unique workflow / skill name")
     description: str = Field(default="", description="Functional overview of the workflow")
     version: str = Field(default="1.0", description="Workflow specification version")
+    engine: Optional[str] = Field(default=None, description="Workflow execution engine")
     type: WorkflowTypeEnum = Field(
         default=WorkflowTypeEnum.SEQUENTIAL,
         description="Workflow topology type: sequential, dag, or loop",
