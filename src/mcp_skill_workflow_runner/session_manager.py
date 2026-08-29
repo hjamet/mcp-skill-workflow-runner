@@ -230,6 +230,7 @@ class SessionManager:
         context: Optional[dict[str, Any]] = None,
         session_id: Optional[str] = None,
         skill_file_path: str = "",
+        workspace_dir: str = "",
     ) -> WorkflowSessionState:
         """
         Initializes a new workflow session state, records the initial step execution entry,
@@ -239,6 +240,7 @@ class SessionManager:
         :param context: Initial context dictionary provided for the workflow.
         :param session_id: Optional custom session ID. If omitted, a unique ID is generated.
         :param skill_file_path: Resolved path to the skill / workflow source file.
+        :param workspace_dir: Root workspace directory for the workflow session.
         :return: The initialized WorkflowSessionState.
         """
         with self._lock:
@@ -273,6 +275,7 @@ class SessionManager:
                 session_id=sid,
                 workflow_name=workflow.name,
                 skill_file_path=skill_file_path or workflow.file_path,
+                workspace_dir=workspace_dir,
                 context=prepared_context,
                 current_step_id=workflow.initial_step,
                 cycle_number=1,
@@ -478,6 +481,7 @@ class SessionManager:
             summary_report: dict[str, Any] = {
                 "session_id": session.session_id,
                 "workflow_name": session.workflow_name,
+                "workspace_dir": session.workspace_dir,
                 "status": session.status,
                 "final_step_id": session.current_step_id,
                 "cycle_count": session.cycle_number,
@@ -528,6 +532,7 @@ class SessionManager:
             {
                 "session_id": s.session_id,
                 "workflow_name": s.workflow_name,
+                "workspace_dir": s.workspace_dir,
                 "current_step_id": s.current_step_id,
                 "cycle_number": s.cycle_number,
                 "status": s.status,

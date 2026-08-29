@@ -223,6 +223,7 @@ class WorkflowSessionState(BaseModel):
     session_id: str
     workflow_name: str
     skill_file_path: str = ""
+    workspace_dir: str = ""
     context: dict[str, Any] = Field(default_factory=dict)
     current_step_id: str
     cycle_number: int = 1

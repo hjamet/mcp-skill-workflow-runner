@@ -81,24 +81,25 @@ def create_server(name: str = "skill-workflow-runner") -> FastMCP:
     @mcp.tool()
     def start_workflow(
         skill_name: str,
+        workspace_dir: str,
         restart: bool = False,
         initial_context: Optional[dict[str, Any]] = None,
-        workspace_dir: Optional[str] = None,
     ) -> dict[str, Any]:
         """
-        Start a new workflow execution for a given skill name or file path.
+        Start a new workflow execution for a given skill name or file path within a specified workspace directory.
 
-        Resolves the SKILL.md/workflow.md file, parses YAML frontmatter and Markdown sections,
-        validates DAG graph connectivity, manages the single active session, and returns the Step 1 directive envelope.
+        Resolves the SKILL.md/workflow.md file taking workspace_dir as top priority (.agent/skills/, .agents/skills/, skills/),
+        parses YAML frontmatter and Markdown sections, validates DAG graph connectivity, manages the single active session,
+        and returns the Step 1 directive envelope.
 
         :param skill_name: Name of the skill (e.g. 'work', 'scout') or path to SKILL.md.
+        :param workspace_dir: Root directory of the target workspace / repository (e.g. 'c:/Users/hjamet/Documents/VoiceNotes').
         :param restart: If True, resets/aborts any active session and creates a fresh one. If False and an active session exists for this workflow, reuses it.
         :param initial_context: Optional initial context variables (e.g. {'mode': 'B', 'project': 'VoiceNotes'}).
-        :param workspace_dir: Optional workspace root directory to look for local skills.
         :return: Deterministic Progressive Disclosure StepResultEnvelope dictionary.
         """
         try:
-            logger.info(f"Starting workflow '{skill_name}' (restart={restart})")
+            logger.info(f"Starting workflow '{skill_name}' in workspace '{workspace_dir}' (restart={restart})")
             skill_path = resolve_skill_file(skill_name=skill_name, workspace_dir=workspace_dir)
             workflow_def = parse_workflow_file(skill_path)
             validate_workflow(workflow_def)
@@ -152,6 +153,7 @@ def create_server(name: str = "skill-workflow-runner") -> FastMCP:
                 workflow=workflow_def,
                 context=initial_context,
                 skill_file_path=str(skill_path),
+                workspace_dir=str(workspace_dir) if workspace_dir else "",
             )
 
             envelope = dag_engine.build_step_envelope(
@@ -199,7 +201,7 @@ def create_server(name: str = "skill-workflow-runner") -> FastMCP:
             # Load workflow definition from skill_file_path
             skill_path = Path(session.skill_file_path)
             if not skill_path.exists():
-                skill_path = resolve_skill_file(session.workflow_name)
+                skill_path = resolve_skill_file(session.workflow_name, workspace_dir=session.workspace_dir or None)
             workflow_def = parse_workflow_file(skill_path)
 
             # Consolidate outputs and variable updates

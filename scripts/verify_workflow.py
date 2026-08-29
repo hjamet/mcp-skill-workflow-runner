@@ -489,7 +489,11 @@ def verify_scenario_e(temp_sessions_dir: Path) -> None:
         # Start workflow
         res1 = await app.call_tool(
             "start_workflow",
-            {"skill_name": work_example, "initial_context": {"project": "VoiceNotes"}},
+            {
+                "skill_name": work_example,
+                "workspace_dir": str(PROJECT_ROOT),
+                "initial_context": {"project": "VoiceNotes"},
+            },
         )
         data1 = json.loads(res1.content[0].text) if hasattr(res1, "content") else res1
         record_check("start_workflow tool returned Step 1 envelope", data1["current_step"]["id"] == "step_1_exploration")
@@ -499,7 +503,11 @@ def verify_scenario_e(temp_sessions_dir: Path) -> None:
         # Call start_workflow again with restart=False -> Reuses session
         res_reuse = await app.call_tool(
             "start_workflow",
-            {"skill_name": work_example, "restart": False},
+            {
+                "skill_name": work_example,
+                "workspace_dir": str(PROJECT_ROOT),
+                "restart": False,
+            },
         )
         data_reuse = json.loads(res_reuse.content[0].text)
         record_check("start_workflow (restart=False) reuses active session", data_reuse["session_id"] == first_sid)
@@ -507,7 +515,12 @@ def verify_scenario_e(temp_sessions_dir: Path) -> None:
         # Call start_workflow with restart=True -> Aborts previous and creates fresh session
         res_restart = await app.call_tool(
             "start_workflow",
-            {"skill_name": work_example, "restart": True, "initial_context": {"project": "VoiceNotes"}},
+            {
+                "skill_name": work_example,
+                "workspace_dir": str(PROJECT_ROOT),
+                "restart": True,
+                "initial_context": {"project": "VoiceNotes"},
+            },
         )
         data_restart = json.loads(res_restart.content[0].text)
         fresh_sid = data_restart["session_id"]

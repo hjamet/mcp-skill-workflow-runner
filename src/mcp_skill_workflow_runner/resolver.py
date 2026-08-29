@@ -44,7 +44,7 @@ def get_search_directories(workspace_dir: Optional[str | Path] = None) -> list[t
     for p in workspace_candidates:
         roots.append(("workspace", p))
 
-    # Global Antigravity vaults & Vault roots
+    # Global Antigravity vaults
     home = Path.home()
     global_candidates = [
         home / ".gemini" / "antigravity" / "builtin" / "skills",
@@ -52,10 +52,6 @@ def get_search_directories(workspace_dir: Optional[str | Path] = None) -> list[t
         home / ".gemini" / "antigravity" / "skills",
         home / ".gemini" / "antigravity" / "global_workflows",
         home / ".antigravity" / "skills",
-        home / "Documents" / "VoiceNotes" / ".agent" / "skills",
-        home / "Documents" / "VoiceNotes" / ".agents" / "skills",
-        home / "Documents" / "VoiceNotes" / "skills",
-        home / "Documents" / "VoiceNotes" / "agents" / "skills",
     ]
     for p in global_candidates:
         roots.append(("global", p))
